@@ -1,0 +1,762 @@
+---
+title: "BLM & SQF: The Impact of the Black Lives Matter Movement on NYC's Stop, Question, Frisk Policy, 2011 and 2018"
+author: "Sreeja Pavuluri"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+sqf <- read.csv("sqf.csv", stringsAsFactors = T)
+View(sqf)
+```
+
+```{r}
+nrow(sqf)
+```
+
+
+```{r}
+#numbers for people stopped, 2011 and 2018, by race
+
+table(sqf$race)
+```
+
+```{r}
+prop.table(table(sqf$race))
+```
+```{r}
+#percentage values, by race, for those who were stopped in 2011 and 2018 combined
+
+prop.table(table(sqf$race))*100
+```
+
+```{r}
+##graph of percentage values by race for 2011 and 2018 total
+
+racebypercent <- (prop.table(table(sqf$race))*100)
+
+barplot(racebypercent, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "blue",
+        main = "Percentage of Stops by Race",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+        
+```
+
+```{r}
+names(sqf)
+```
+
+```{r}
+## subsets of data to compare percentages by race for searches, frisks, arrests, and summons issued for 2011 and 2018 combined.
+
+arrests <- subset(sqf, arstmade == "Y")
+frisks <- subset(sqf, frisked == "Y")
+searched <- subset(sqf, searched == "Y")
+summoned <- subset(sqf, sumissue == "Y")
+```
+
+```{r}
+## graph of percentage arrested by race, 2011 and 2018 combined
+
+table(arrests$race)
+prop.table(table(arrests$race))
+prop.table(table(arrests$race))*100
+arrestsbyrace <- (prop.table(table(arrests$race))*100)
+
+barplot(arrestsbyrace, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "red",
+        main = "Percentage of Arrests by Race",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage frisked by race, 2011 and 2018 combined
+
+table(frisks$race)
+prop.table(table(frisks$race))
+prop.table(table(frisks$race))*100
+frisksbyrace <- (prop.table(table(frisks$race))*100)
+
+barplot(frisksbyrace, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "green",
+        main = "Percentage of Frisks by Race",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage searched by race, 2011 and 2018 combined
+
+table(searched$race)
+prop.table(table(searched$race))
+prop.table(table(searched$race))*100
+searchbyrace <- (prop.table(table(searched$race))*100)
+
+barplot(searchbyrace, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "yellow",
+        main = "Percentage of Searches by Race",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage summoned by race, 2011 and 2018 combined
+
+table(summoned$race)
+prop.table(table(summoned$race))
+prop.table(table(summoned$race))*100
+summonbyrace <- (prop.table(table(summoned$race))*100)
+
+barplot(summonbyrace, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "orange",
+        main = "Percentage of Summons by Race",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+```{r}
+total <- c("Summoned" = summonbyrace, "Arrested" = arrestsbyrace, "Frisked" = frisksbyrace, "Searched" = searchbyrace, "Stopped" = racebypercent)
+
+barplot(total,
+        ylim = c(0, 60),
+        col = c("#065143", "#129490", "#70B77E", "#CE1483", "#7F5A83", "#091540"),
+        main = "Comparison of Percentages for Black People Summoned, Arrested, Frisked, Searched, and Stopped in 2011 & 2018, Combined",
+        cex.main = 0.6,
+        cex.names = 0.5,
+        ylab = "Percentage",
+        cex.lab = 0.6, 
+        names.arg = c("Summoned", " ", " ", " ", " ", " ", "Arrested",  " ", " ", " ", " ", " ", "Frisked", " ", " ", " ", " ", " ", "Searched", " ", " ", " ", " ", " ", "Stopped", " ", " ", " ", " ", " "),
+        las = 2)
+
+legend("top", col=c("#065143", "#129490", "#70B77E", "#CE1483", "#7F5A83", "#091540"), 
+       c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"), 
+       cex = .3,
+       lwd=2,
+       horiz = T,
+      xpd=TRUE)
+```
+
+```{r}
+## subsetting data to only that from 2018
+
+deblasio <- subset(sqf, mayor == "deblasio")
+
+nrow(deblasio)
+
+table(deblasio$race)
+```
+
+```{r}
+prop.table(table(deblasio$race))
+
+prop.table(table(deblasio$race))*100
+```
+
+```{r}
+##graph of percentage values by race for 2018
+
+racebypercent2018 <- (prop.table(table(deblasio$race))*100)
+
+barplot(racebypercent2018, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "darkblue",
+        main = "Percentage of Stops by Race in 2018",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+        
+```
+
+```{r}
+## subsets of data to compare percentages by race for searches, frisks, arrests, and summons issued for 2018
+
+arrests2018 <- subset(deblasio, arstmade == "Y")
+frisks2018 <- subset(deblasio, frisked == "Y")
+searched2018 <- subset(deblasio, searched == "Y")
+summoned2018 <- subset(deblasio, sumissue == "Y")
+```
+
+```{r}
+## graph of percentage arrested by race, 2018
+
+table(arrests2018$race)
+prop.table(table(arrests2018$race))
+prop.table(table(arrests2018$race))*100
+arrestsbyrace2018 <- (prop.table(table(arrests2018$race))*100)
+
+barplot(arrestsbyrace2018, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "darkred",
+        main = "Percentage of Arrests by Race in 2018",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage frisked by race, 2018
+
+table(frisks2018$race)
+prop.table(table(frisks2018$race))
+prop.table(table(frisks2018$race))*100
+frisksbyrace2018 <- (prop.table(table(frisks2018$race))*100)
+
+barplot(frisksbyrace2018, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "darkgreen",
+        main = "Percentage of Frisks by Race in 2018",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage searched by race, 2018
+
+table(searched2018$race)
+prop.table(table(searched2018$race))
+prop.table(table(searched2018$race))*100
+searchbyrace2018 <- (prop.table(table(searched2018$race))*100)
+
+barplot(searchbyrace2018, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "#9b870c",
+        main = "Percentage of Searches by Race in 2018",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage issued summons by race, 2018
+
+table(summoned2018$race)
+prop.table(table(summoned2018$race))
+prop.table(table(summoned2018$race))*100
+summonbyrace2018 <- (prop.table(table(summoned2018$race))*100)
+
+barplot(summonbyrace2018, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "darkorange",
+        main = "Percentage of Summons by Race in 2018",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+```{r}
+#comparative graph for 2018
+
+total2018 <- c("Summoned" = summonbyrace2018, "Arrested" = arrestsbyrace2018, "Frisked" = frisksbyrace2018, "Searched" = searchbyrace2018, "Stopped" = racebypercent2018)
+
+barplot(total2018,
+        ylim = c(0, 60),
+        col = c("#44AF69", "#F8333C", "#FCAB10", "#2B9EB3", "#64113F", "#2C2C54"),
+        main = "Comparison of Percentages for Black People Summoned, Arrested, Frisked, Searched, and Stopped in 2018",
+        cex.main = 0.7,
+        cex.names = 0.5,
+        ylab = "Percentage",
+        cex.lab = 0.6, 
+        names.arg = c("Summoned", " ", " ", " ", " ", " ", "Arrested",  " ", " ", " ", " ", " ", "Frisked", " ", " ", " ", " ", " ", "Searched", " ", " ", " ", " ", " ", "Stopped", " ", " ", " ", " ", " "),
+        las = 2)
+
+legend("top", col=c("#44AF69", "#F8333C", "#FCAB10", "#2B9EB3", "#64113F", "#2C2C54"), 
+       c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"), 
+       cex = .3,
+       lwd=2,
+       horiz = T,
+      xpd=TRUE)
+```
+
+```{r}
+## subsetting data to only that from 2011
+
+bloomberg <- subset(sqf, mayor == "bloomberg")
+
+nrow(bloomberg)
+
+table(bloomberg$race)
+```
+
+```{r}
+prop.table(table(bloomberg$race))
+
+prop.table(table(bloomberg$race))*100
+```
+
+```{r}
+##graph of percentage values by race for 2011
+
+racebypercent2011 <- (prop.table(table(bloomberg$race))*100)
+
+barplot(racebypercent2011, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "lightblue",
+        main = "Percentage of Stops by Race in 2011",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+        
+```
+
+```{r}
+## subsets of data to compare percentages by race for searches, frisks, arrests, and summons issued for 2011
+
+arrests2011 <- subset(bloomberg, arstmade == "Y")
+frisks2011 <- subset(bloomberg, frisked == "Y")
+searched2011 <- subset(bloomberg, searched == "Y")
+summoned2011 <- subset(bloomberg, sumissue == "Y")
+```
+
+```{r}
+## graph of percentage arrested by race, 2011
+
+table(arrests2011$race)
+prop.table(table(arrests2011$race))
+prop.table(table(arrests2011$race))*100
+arrestsbyrace2011 <- (prop.table(table(arrests2011$race))*100)
+
+barplot(arrestsbyrace2011, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "pink",
+        main = "Percentage of Arrests by Race in 2011",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage frisked by race, 2011
+
+table(frisks2011$race)
+prop.table(table(frisks2011$race))
+prop.table(table(frisks2011$race))*100
+frisksbyrace2011 <- (prop.table(table(frisks2011$race))*100)
+
+barplot(frisksbyrace2011, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "lightgreen",
+        main = "Percentage of Frisks by Race in 2011",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage searched by race, 2011
+
+table(searched2011$race)
+prop.table(table(searched2011$race))
+prop.table(table(searched2011$race))*100
+searchbyrace2011 <- (prop.table(table(searched2011$race))*100)
+
+barplot(searchbyrace2011, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "lightyellow",
+        main = "Percentage of Searches by Race in 2011",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+
+```{r}
+## graph of percentage issued summons by race, 2011
+
+table(summoned2011$race)
+prop.table(table(summoned2011$race))
+prop.table(table(summoned2011$race))*100
+summonbyrace2011 <- (prop.table(table(summoned2011$race))*100)
+
+barplot(summonbyrace2011, 
+        ylim = c(0,60),
+        names = c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"),
+        col = "#FFDBBB",
+        main = "Percentage of Summons by Race in 2011",
+        cex.main = .8,
+        cex.names = .5,
+        ylab = "Percentage",
+        cex.lab = .6,
+        las = 1)
+```
+
+```{r}
+#comparative graph for 2011
+
+total2011 <- c("Summoned" = summonbyrace2011, "Arrested" = arrestsbyrace2011, "Frisked" = frisksbyrace2011, "Searched" = searchbyrace2011, "Stopped" = racebypercent2011)
+
+barplot(total2011,
+        ylim = c(0, 60),
+        col = c("#EB6", "#FA9", "#7C6", "#BAB", "#FFD", "#8F2"),
+        main = "Comparison of Percentages for Black People Summoned, Arrested, Frisked, Searched, and Stopped in 2011",
+        cex.main = 0.7,
+        cex.names = 0.5,
+        ylab = "Percentage",
+        cex.lab = 0.6, 
+        names.arg = c("Summoned", " ", " ", " ", " ", " ", "Arrested",  " ", " ", " ", " ", " ", "Frisked", " ", " ", " ", " ", " ", "Searched", " ", " ", " ", " ", " ", "Stopped", " ", " ", " ", " ", " "),
+        las = 2)
+
+legend("top", col=c("#EB6", "#FA9", "#7C6", "#BAB","#FFD", "#8F2"), 
+       c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"), 
+       cex = .3,
+       lwd=2,
+       horiz = T,
+      xpd=TRUE)
+
+
+```
+
+
+```{r}
+#combined comparative graph by race + years
+
+summonbyracetotal <- c(summonbyrace2011, summonbyrace2018, summonbyrace)
+arrestsbyracetotal <- c(arrestsbyrace2011, arrestsbyrace2018, arrestsbyrace)
+frisksbyracetotal <- c(frisksbyrace2011, frisksbyrace2018, frisksbyrace)
+searchbyracetotal <- c(searchbyrace2011, searchbyrace2018, searchbyrace)
+racebypercenttotal <- c(racebypercent2011, racebypercent2018, racebypercent)
+
+datapercenttotals <- c("Summoned" = summonbyracetotal, "Arrested" = arrestsbyracetotal, "Frisked" = frisksbyracetotal, "Searched" = searchbyracetotal, "Stopped" = racebypercenttotal)
+
+
+
+barplot(datapercenttotals,
+        ylim = c(0, 60),
+        col = c("#EB6424", "#FA9500", "#7C6A0A", "#BABD8D", "#FFDAC6", "#8F2D56"),
+        main = "Comparison of Percentages for Black People Summoned, Arrested, Frisked, Searched, and Stopped",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Percentage",
+        cex.lab = 0.6,
+        names.arg = c("Summoned - 2011", "", "", "", "", "", "Summoned - 2018", "", "", "", "", "", "Summoned - total", "", "", "", "", "", "Arrested - 2011",  "", "", "", "", "", "Arrested - 2018", "", "", "", "", "", "Arrested - total", "", "", "", "", "", "Frisked - 2011", "", "", "", "", "", "Frisked - 2018", "", "", "", "", "", "Frisked - total", "", "", "", "", "", "Searched - 2011", "", "", "", "", "", "Searched - 2018", "", "", "", "", "", "Searched - total", "", "", "", "", "", "Stopped - 2011", "", "", "", "", "", "Stopped - 2018", "", "", "", "", "", "Stopped - total", "", "", "", "", ""),
+        las = 2)
+legend("top", col=c("#EB6424", "#FA9500", "#7C6A0A", "#BABD8D","#FFDAC6", "#8F2D56"), 
+       c("Native American", "Asian/Pacific Islander", "Black", "Black Hispanic", "White Hispanic", "White"), 
+       cex = .3,
+       lwd=2,
+       horiz = T,
+      xpd=TRUE)
+```
+
+```{r}
+#creating a new variable that combines Black and Black Hispanic and results in a numerical data point
+
+sqf$blackstop <- ifelse(sqf$race == "BLACK" | sqf$race == "BLACK HISPANIC", 1, 0)
+
+bloomberg$blackstop2011 <- ifelse(bloomberg$race == "BLACK" | bloomberg$race == "BLACK HISPANIC", 1, 0)
+
+deblasio$blackstop2018 <- ifelse(deblasio$race == "BLACK" | deblasio$race == "BLACK HISPANIC", 1, 0)
+
+names(sqf)
+
+table(sqf$blackstop)
+table(bloomberg$blackstop2011)
+table(deblasio$blackstop2018)
+
+mean(sqf$blackstop, na.rm = TRUE)
+mean(bloomberg$blackstop2011, na.rm = TRUE)
+mean(deblasio$blackstop2018, na.rm = TRUE)
+
+```
+
+```{r}
+##graphing data for the means of black people stopped
+
+mean_blackstop_total <- mean(sqf$blackstop, na.rm = TRUE)
+mean_blackstop_2011 <- mean(bloomberg$blackstop2011, na.rm = TRUE)
+mean_blackstop_2018 <- mean(deblasio$blackstop2018, na.rm = TRUE)
+
+meanblackstops <- c("Total" = mean_blackstop_total, "2011" = mean_blackstop_2011, "2018" = mean_blackstop_2018)
+
+barplot(meanblackstops,
+        ylim = c(0, 0.7),
+        col = c("purple", "grey", "turquoise"),
+        main = "Means for Black People Stopped",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        las = 1)
+```
+
+```{r}
+arrests$blackarrest <- ifelse(arrests$race == "BLACK" | arrests$race == "BLACK HISPANIC", 1, 0)
+
+arrests2011$blackarrests2011 <- ifelse(arrests2011$race == "BLACK" | arrests2011$race == "BLACK HISPANIC", 1, 0)
+
+arrests2018$blackarrests2018 <- ifelse(arrests2018$race == "BLACK" | arrests2018$race == "BLACK HISPANIC", 1, 0)
+
+table(arrests$blackarrest)
+table(arrests2011$blackarrests2011)
+table(arrests2018$blackarrests2018)
+
+mean(arrests$blackarrest, na.rm = TRUE)
+mean(arrests2011$blackarrests2011, na.rm = TRUE)
+mean(arrests2018$blackarrests2018, na.rm = TRUE)
+```
+
+```{r}
+##graphing data for the means of black people arrested
+
+mean_blackarrests_total <- mean(arrests$blackarrest, na.rm = TRUE)
+mean_blackarrests_2011 <- mean(arrests2011$blackarrests2011, na.rm = TRUE)
+mean_blackarrests_2018 <- mean(arrests2018$blackarrests2018, na.rm = TRUE)
+
+meanblackarrests <- c("Total" = mean_blackarrests_total, "2011" = mean_blackarrests_2011, "2018" = mean_blackarrests_2018)
+
+barplot(meanblackarrests,
+        ylim = c(0, 0.7),
+        col = c("#4ECDC4", "#FFE66D", "#FF6B6B"),
+        main = "Means for Black People Arrested",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        las = 1)
+```
+
+```{r}
+##graphing data for the means of black people frisked
+
+frisks$blackfrisks <- ifelse(frisks$race == "BLACK" | frisks$race == "BLACK HISPANIC", 1, 0)
+
+frisks2011$blackfrisks2011 <- ifelse(frisks2011$race == "BLACK" | frisks2011$race == "BLACK HISPANIC", 1, 0)
+
+frisks2018$blackfrisks2018 <- ifelse(frisks2018$race == "BLACK" | frisks2018$race == "BLACK HISPANIC", 1, 0)
+
+table(frisks$blackfrisks)
+table(frisks2011$blackfrisks2011)
+table(frisks2018$blackfrisks2018)
+
+mean(frisks$blackfrisks, na.rm = TRUE)
+mean(frisks2011$blackfrisks2011, na.rm = TRUE)
+mean(frisks2018$blackfrisks2018, na.rm = TRUE)
+
+mean_blackfrisks_total <- mean(frisks$blackfrisks, na.rm = TRUE)
+mean_blackfrisks_2011 <- mean(frisks2011$blackfrisks2011, na.rm = TRUE)
+mean_blackfrisks_2018 <- mean(frisks2018$blackfrisks2018, na.rm = TRUE)
+
+meanblackfrisks <- c("Total" = mean_blackfrisks_total, "2011" = mean_blackfrisks_2011, "2018" = mean_blackfrisks_2018)
+
+barplot(meanblackfrisks,
+        ylim = c(0, 0.7),
+        col = c("#5D5179", "#4F759B", "#92C9B1"),
+        main = "Means for Black People Frisked",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        las = 1)
+```
+
+```{r}
+##graphing data for the means of black people searched
+
+searched$blacksearch <- ifelse(searched$race == "BLACK" | searched$race == "BLACK HISPANIC", 1, 0)
+
+searched2011$blacksearch2011 <- ifelse(searched2011$race == "BLACK" | searched2011$race == "BLACK HISPANIC", 1, 0)
+
+searched2018$blacksearch2018 <- ifelse(searched2018$race == "BLACK" | searched2018$race == "BLACK HISPANIC", 1, 0)
+
+table(searched$blacksearch)
+table(searched2011$blacksearch2011)
+table(searched2018$blacksearch2018)
+
+mean(searched$blacksearch, na.rm = TRUE)
+mean(searched2011$blacksearch2011, na.rm = TRUE)
+mean(searched2018$blacksearch2018, na.rm = TRUE)
+
+mean_blacksearch_total <- mean(searched$blacksearch, na.rm = TRUE)
+mean_blacksearch_2011 <- mean(searched2011$blacksearch2011, na.rm = TRUE)
+mean_blacksearch_2018 <- mean(searched2018$blacksearch2018, na.rm = TRUE)
+
+meanblacksearch <- c("Total" = mean_blacksearch_total, "2011" = mean_blacksearch_2011, "2018" = mean_blacksearch_2018)
+
+barplot(meanblacksearch,
+        ylim = c(0, 0.7),
+        col = c("#E08DAC", "#6A7FDB", "#734B5E"),
+        main = "Means for Black People Searched",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        las = 1)
+```
+
+```{r}
+##graphing data for the means of black people issued summons
+
+summoned$blacksummoned <- ifelse(summoned$race == "BLACK" | summoned$race == "BLACK HISPANIC", 1, 0)
+
+summoned2011$blacksummoned2011 <- ifelse(summoned2011$race == "BLACK" | summoned2011$race == "BLACK HISPANIC", 1, 0)
+
+summoned2018$blacksummoned2018 <- ifelse(summoned2018$race == "BLACK" | summoned2018$race == "BLACK HISPANIC", 1, 0)
+
+table(summoned$blacksummoned)
+table(summoned2011$blacksummoned2011)
+table(summoned2018$blacksummoned2018)
+
+mean(summoned$blacksummoned, na.rm = TRUE)
+mean(summoned2011$blacksummoned2011, na.rm = TRUE)
+mean(summoned2018$blacksummoned2018, na.rm = TRUE)
+
+mean_blacksummoned_total <- mean(summoned$blacksummoned, na.rm = TRUE)
+mean_blacksummoned_2011 <- mean(summoned2011$blacksummoned2011, na.rm = TRUE)
+mean_blacksummoned_2018 <- mean(summoned2018$blacksummoned2018, na.rm = TRUE)
+
+meanblacksummoned <- c("Total" = mean_blacksummoned_total, "2011" = mean_blacksummoned_2011, "2018" = mean_blacksummoned_2018)
+
+barplot(meanblacksummoned,
+        ylim = c(0, 0.7),
+        col = c("#B9E3C6", "#23395B", "#FFFD98"),
+        main = "Means for Black People Issued Summons",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        las = 1)
+```
+
+```{r}
+##graphing comparison of means for black people stopped, summoned, arrested, frisked, and searched
+
+meanblacksummon <- c(mean_blacksummoned_total, mean_blacksummoned_2011, mean_blacksummoned_2018)
+meanblacksearched <- c(mean_blacksearch_total, mean_blacksearch_2011, mean_blacksearch_2018)
+meanblackfrisk <- c(mean_blackfrisks_total, mean_blackfrisks_2011, mean_blackfrisks_2018)
+meanblackarrest <- c(mean_blackarrests_total, mean_blackarrests_2011, mean_blackarrests_2018)
+meanblackstop <- c(mean_blackstop_total, mean_blackstop_2011, mean_blackstop_2018)
+
+
+
+
+meanblacktotal<- c("Summoned" = meanblacksummon, "Arrested" = meanblackarrests, "Frisked" = meanblackfrisk, "Searched" = meanblacksearched, "Stopped" = meanblackstops)
+
+barplot(meanblacktotal,
+        ylim = c(0, 0.7),
+        col = c("#18314F", "#8BBEB2", "#E6F9AF"),
+        main = "Comparison of Means for Black People Summoned, Arrested, Frisked, Searched, and Stopped",
+        cex.main = 0.8,
+        cex.names = 0.5,
+        ylab = "Mean",
+        cex.lab = 0.6,
+        names.arg=c("Summoned - total", "Summoned - 2011", "Summoned - 2018", "Arrested - total", "Arrested - 2011", "Arrested - 2018", "Frisked - total","Frisked - 2011", "Frisked - 2018", "Searched - total", "Searched - 2011", "Searched - 2018", "Stopped - total", "Stopped - 2011", "Stopped - 2018"),
+        las = 2)
+
+legend("topleft",  col=c("#18314F", "#8BBEB2", "#E6F9AF"), 
+       c("Total", "2011", "2018"), 
+       cex = .7,
+       lwd=4,
+       bty="n")
+```
+
+```{r}
+#calculating difference in means between 2011 and 2018 for black people stopped, summoned, arrested, frisked, and searched
+
+meanblacksummon <- c(mean_blacksummoned_total, mean_blacksummoned_2011, mean_blacksummoned_2018)
+meanblacksearched <- c(mean_blacksearch_total, mean_blacksearch_2011, mean_blacksearch_2018)
+meanblackfrisk <- c(mean_blackfrisks_total, mean_blackfrisks_2011, mean_blackfrisks_2018)
+meanblackarrest <- c(mean_blackarrests_total, mean_blackarrests_2011, mean_blackarrests_2018)
+meanblackstop <- c(mean_blackstop_total, mean_blackstop_2011, mean_blackstop_2018)
+
+diff.meanssummon <- mean_blacksummoned_2018 - mean_blacksummoned_2011
+diff.meanssearch <- mean_blacksearch_2018 - mean_blacksearch_2011
+diff.meansfrisk <- mean_blackfrisks_2018 - mean_blackfrisks_2011
+diff.meansarrest <- mean_blackarrests_2018 - mean_blackarrests_2011
+diff.meansstop <- mean_blackstop_2018 - mean_blackstop_2011
+
+diff.meanssummon
+diff.meanssearch
+diff.meansfrisk
+diff.meansarrest
+diff.meansstop 
+```
+
+```{r}
+##t.test to see if the difference in means were statistically significant
+
+testsummon <- t.test(summoned2018$blacksummoned2018, summoned2011$blacksummoned2011)
+
+testsearch <- t.test(searched2018$blacksearch2018, searched2011$blacksearch2011)
+
+testfrisk <- t.test(frisks2018$blackfrisks2018, frisks2011$blackfrisks2011)
+
+testarrest <- t.test(arrests2018$blackarrests2018, arrests2011$blackarrests2011)
+
+teststop <- t.test(deblasio$blackstop2018, bloomberg$blackstop2011)
+
+testsummon
+
+testsearch
+
+testfrisk
+
+testarrest
+
+teststop
+```
+
